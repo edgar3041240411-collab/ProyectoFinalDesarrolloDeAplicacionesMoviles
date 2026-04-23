@@ -9,27 +9,35 @@ export default function ProfileScreen() {
           {/* Contenedor de Imagen de Perfil */}
           <View style={styles.imageContainer}>
             <Image
-              source={require("../../assets/logo.png")} 
+              source={require("../../assets/pro.jpeg")} 
               style={styles.image}
             />
             <View style={styles.badge}>
-              <Text style={styles.badgeText}>ESTUDIANTE</Text>
+              <Text style={styles.badgeText}>3bbq y 1ranch</Text>
             </View>
           </View>
 
           <View style={styles.infoBox}>
-            <Text style={styles.label}>Nombre del Estudiante</Text>
+            <Text style={styles.label}>Integrantes y Roles</Text>
+            
             <Text style={styles.value}>Caballero López Edgar Alfredo</Text>
+            <Text style={styles.role}>Electrónica (Circuito)</Text>
+
+            <Text style={styles.value}>Rojas Rodriguez Angel Mauricio</Text>
+            <Text style={styles.role}>Diseño y Pruebas (Diseño y estructura)</Text>
+
+            <Text style={styles.value}>Zapata Villarreal Pedro Durango</Text>
+            <Text style={styles.role}>Programador (Controlador)</Text>
+
+            <Text style={styles.value}>Díaz Hernández Eduardo</Text>
+            <Text style={styles.role}>Mecánica (Estructura)</Text>
             
             <View style={styles.divider} />
             
             <Text style={styles.label}>Proyecto</Text>
-            <Text style={styles.value}>Insumos MAAC</Text>
+            <Text style={styles.value}>Carrito Seguidor de Lineas</Text>
 
             <View style={styles.divider} />
-
-            <Text style={styles.label}>Correo Electrónico</Text>
-            <Text style={styles.value}>edgar30413210@utd.edu.mx</Text>
             
             <View style={styles.divider} />
             
@@ -38,7 +46,7 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        <Text style={styles.footerText}>Examen Parcial 3 • 5°A</Text>
+        <Text style={styles.footerText}>Proyecto Final • 5°A</Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -64,7 +72,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 12,
     borderTopWidth: 5,
-    borderTopColor: '#a71515', // Borde superior con tu color de marca
+    borderTopColor: '#a71515', 
   },
   imageContainer: {
     alignItems: 'center',
@@ -100,13 +108,19 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 1,
-    marginBottom: 4 
+    marginBottom: 8 
   },
   value: { 
-    fontSize: 17, 
+    fontSize: 16, 
     fontWeight: '600', 
     color: '#2d3436', 
-    marginBottom: 12 
+    marginBottom: 2 
+  },
+  role: {
+    fontSize: 13,
+    color: '#636e72',
+    fontStyle: 'italic',
+    marginBottom: 12
   },
   divider: { 
     height: 1, 

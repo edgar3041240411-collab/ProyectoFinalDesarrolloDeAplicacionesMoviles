@@ -1,73 +1,107 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
-import { useCart } from "../navigation/AppNavigator";
+import { View, Text, Image, ScrollView, StyleSheet, SafeAreaView } from "react-native";
 
-export default function ProductDetailScreen({ route, navigation }) {
-  // Aseguramos la extracción de datos de los parámetros de la ruta [cite: 7]
-  const { name, price, image, description } = route.params || {};
-  const { addToCart } = useCart();
+export default function ProductDetailScreen({ route }) {
+  const { name, description, image } = route.params;
 
-  const handleAdd = () => {
-    if (!name) return; // Evita agregar objetos vacíos si no hay datos
-    
-    addToCart({ name, price, image });
-    
-    // Mejora visual: Feedback claro al usuario antes de navegar [cite: 44]
-    Alert.alert("Éxito", `${name} se añadió al carrito.`);
-    
-    // IMPORTANTE: Cambiamos "Cart" por "Carrito" para coincidir con el Tab.Screen en AppNavigator.js
-    navigation.navigate("Carrito");
+  // Mapa de imágenes locales corregido según tus archivos actuales
+  const imageMap = {
+    carroEnsamblado: require("../../assets/carroEnsamblado.jpeg"),
+    ensa1: require("../../assets/ensa1.png"),
+    ensa2: require("../../assets/ensa2.png"),
+    ensa3: require("../../assets/ensa3.png"),
+    ensa4: require("../../assets/ensa4.png"),
+    ensa5: require("../../assets/ensa5.png"),
+    ensa6: require("../../assets/ensa6.png"),
+    ensa7: require("../../assets/ensa7.png"),
+    ensa8: require("../../assets/ensa8.png"),
+    ensa9: require("../../assets/ensa9.png"),
+    arquiInterna: require("../../assets/arquiInterna.png"), // Solo se cambió esta línea
+    cableado2: require("../../assets/cableado2.jpeg"),
+    calibra: require("../../assets/calibra.jpeg"),
+    "confff.jpeg": require("../../assets/confff.jpeg"),
+  };
+
+  const renderContent = () => {
+    return description.split("\n\n").map((section, index) => {
+      // Renderizado de subtítulos atractivos
+      if (section.startsWith("¿")) {
+        return <Text key={index} style={styles.impactTitle}>{section}</Text>;
+      }
+
+      // Regex mejorada para detectar si el inicio es una URL o una clave del mapa local
+      const imageMatch = section.match(/^(https?:\/\/[\S]+|[\w.-]+)\s*\((.*?)\):\s*([\s\S]*)/);
+      
+      if (imageMatch) {
+        const [_, imgSource, label, info] = imageMatch;
+        const isUrl = imgSource.startsWith("http");
+
+        return (
+          <View key={index} style={styles.featureCard}>
+            <Text style={styles.bodyText}>
+              <Text style={styles.highlight}>({label}):</Text> {info}
+            </Text>
+            {/* Decide si cargar de internet o de la carpeta assets */}
+            <Image 
+              source={isUrl ? { uri: imgSource } : imageMap[imgSource]} 
+              style={styles.featureImage} 
+            />
+          </View>
+        );
+      }
+
+      return <Text key={index} style={styles.bodyText}>{section}</Text>;
+    });
   };
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Soporte para imágenes locales (require) o URLs (uri)  */}
-      {image && (
+    <SafeAreaView style={styles.mainBox}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Imagen principal de la sección */}
         <Image 
-          source={typeof image === 'string' ? { uri: image } : image} 
-          style={styles.image} 
+          source={typeof image === "string" ? { uri: image } : image} 
+          style={styles.hero} 
         />
-      )}
-      
-      <View style={styles.info}>
-        <Text style={styles.title}>{name}</Text>
-        <Text style={styles.price}>${price}</Text>
         
-        <View style={styles.line} />
-        
-        <Text style={styles.label}>Descripción:</Text>
-        <Text style={styles.desc}>
-          {description || "Insumo de alta calidad seleccionado para optimizar los resultados en el sector agropecuario."}
-        </Text>
-        
-        <TouchableOpacity style={styles.btn} onPress={handleAdd}>
-          <Text style={styles.btnText}>AGREGAR AL CARRITO</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+        <View style={styles.contentContainer}>
+          <Text style={styles.topName}>{name}</Text>
+          <View style={styles.accentLine} />
+          
+          {renderContent()}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-  image: { width: "100%", height: 320, resizeMode: 'cover' },
-  info: { padding: 25 },
-  title: { fontSize: 28, fontWeight: "bold", color: "#2d3436" },
-  price: { fontSize: 26, color: "#2ecc71", fontWeight: "bold", marginVertical: 10 },
-  line: { height: 2, backgroundColor: "#f1f1f1", marginVertical: 15 },
-  label: { fontSize: 12, color: "#a71515", fontWeight: "bold", textTransform: "uppercase", marginBottom: 5 },
-  desc: { fontSize: 16, color: "#636e72", lineHeight: 24, marginBottom: 20 },
-  btn: { 
-    backgroundColor: "#a71515", 
+  mainBox: { flex: 1, backgroundColor: "#FFF" },
+  hero: { width: "100%", height: 260, resizeMode: "cover" },
+  contentContainer: { padding: 25 },
+  topName: { fontSize: 26, fontWeight: "900", color: "#2D3436" },
+  accentLine: { height: 4, width: 40, backgroundColor: "#D63031", marginVertical: 15, borderRadius: 2 },
+  impactTitle: { fontSize: 18, fontWeight: "bold", color: "#D63031", marginTop: 25, marginBottom: 10, lineHeight: 24 },
+  bodyText: { fontSize: 16, color: "#4A4A4A", lineHeight: 26, textAlign: 'justify', marginBottom: 12 },
+  highlight: { color: "#000", fontWeight: "bold" },
+  featureCard: { 
+    backgroundColor: "#FDFDFD", 
     padding: 18, 
-    borderRadius: 12, 
-    marginTop: 10, 
-    alignItems: "center",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4
+    borderRadius: 15, 
+    marginVertical: 15, 
+    borderLeftWidth: 6, 
+    borderLeftColor: "#D63031", 
+    elevation: 3, 
+    shadowColor: "#000", 
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.1, 
+    shadowRadius: 4 
   },
-  btnText: { color: "#fff", fontSize: 18, fontWeight: "bold", letterSpacing: 1 }
+  featureImage: { 
+    width: "100%", 
+    height: 230, 
+    borderRadius: 10, 
+    marginTop: 15, 
+    resizeMode: "contain", 
+    backgroundColor: '#FFF' 
+  }
 });

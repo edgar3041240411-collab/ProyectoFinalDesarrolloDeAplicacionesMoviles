@@ -4,11 +4,12 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>MAAC - Insumos para el Campo</Text>
+      <Text style={styles.title}>Carrito Seguidor De Lineas</Text>
+      <Text style={styles.subtitle}>3bbq y 1ranch</Text>
       
       {/* Tu logo desde la carpeta assets */}
       <Image 
-        source={require("../../assets/logo.png")} 
+        source={require("../../assets/pro.jpeg")} 
         style={styles.logo} 
         resizeMode="contain" 
       />
@@ -18,7 +19,7 @@ export default function HomeScreen({ navigation }) {
         style={styles.button} 
         onPress={() => navigation.navigate("ProductListScreen")}
       >
-        <Text style={styles.buttonText}>Ver Catálogo</Text>
+        <Text style={styles.buttonText}>Ver </Text>
       </TouchableOpacity>
 
       {/* El botón de "Ir al Carrito" se eliminó para evitar redundancia con los Tabs */}
@@ -37,8 +38,14 @@ const styles = StyleSheet.create({
   title: { 
     fontSize: 24, 
     fontWeight: "bold", 
-    marginBottom: 20,
+    marginBottom: 5, // Reduje un poco el margen para que el "Hola" quede cerca
     color: "#333",
+    textAlign: "center"
+  },
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 20,
+    color: "#666",
     textAlign: "center"
   },
   logo: { 
